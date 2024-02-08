@@ -1,23 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
-
+import {useState, useEffect } from 'react'
 function App() {
+
+  const [type, setType] = useState('posts');
+  const [posts, setPosts] = useState([]) ; 
+  useEffect(() =>{
+    const fetchData = async ()=>{
+      const response = await fetch(`https://jsonplaceholder.typicode.com/${type}`);
+
+      const json = await response.json();
+      // console.log(json);
+      setPosts(json)
+
+    };
+    fetchData();
+  },[type])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* {console.log(posts)} */}
+      <button onClick={()=>setType('posts')}>posts</button>
+      {/* <button onClick={() =>setType('comments')}>comments</button> */}
+      <button onClick={() =>setType('albums')}>albums</button>
+      <button onClick={() =>setType('photos')}>photos</button>
+      {/* <button onClick={() =>setType('users')}>users</button> */}
+  
+      <ul>
+        {posts.map((post)=> (
+          <li key={post.id}> {post.title}
+            {/* {console.log(post)} */}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
